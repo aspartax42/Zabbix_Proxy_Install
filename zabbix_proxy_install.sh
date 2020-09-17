@@ -44,6 +44,8 @@ y
 EOF
 
 
+
+
 # Configuration de la base de données
 mysql -uroot -p'$ROOT_DB_PASS' -e "drop database if exists zabbix_proxy;"
 
@@ -53,19 +55,6 @@ mysql -uroot -p'$ROOT_DB_PASS' -e "create database zabbix_proxy character set ut
 
 mysql -uroot -p'$ROOT_DB_PASS' -e "grant all on zabbix_proxy.* to 'zabbix'@'%' identified by '"$ZABBIX_DB_PASS"' with grant option;"
 
-mysql -uroot -p'$ROOT_DB_PASS' -D zabbix_proxy -e "set global innodb_strict_mode='OFF';"
-
-zcat /usr/share/doc/zabbix-proxy-mysql*/schema.sql.gz |  mysql -u zabbix --password=$ZABBIX_DB_PASS zabbix_proxy
-
-mysql -uroot -p'$ROOT_DB_PASS' -D zabbix_proxy -e "set global innodb_strict_mode='ON';"
-
-
-# Génération de la clé PSK
-openssl rand -hex 32 > /etc/zabbix/zabbix_proxy.psk
-chown zabbix:zabbix /etc/zabbix/zabbix_proxy.psk
-chmod 644 /etc/zabbix/zabbix_proxy.psk
-
-echo "PSK OK"
 
 # Execution du script de modification du fichier /etc/zabbix/zabbix_proxy.conf
 echo "Server=monitoring.stodeo.com" > /etc/zabbix/zabbix_proxy.conf
@@ -130,8 +119,30 @@ echo "TLSPSKIdentity="$PSK_ID"" >> /etc/zabbix/zabbix_proxy.conf
 
 echo "Fin fichier conf"
 
-##systemctl restart zabbix-proxy
-#systemctl enable zabbix-proxy
+systemctl restart zabbix-proxy
+systemctl enable zabbix-proxy
+
+
+# Génération de la clé PSK
+openssl rand -hex 32 > /etc/zabbix/zabbix_proxy.psk
+chown zabbix:zabbix /etc/zabbix/zabbix_proxy.psk
+chmod 644 /etc/zabbix/zabbix_proxy.psk
+
+systemctl restart zabbix-proxy
+
+echo "PSK OK"
+
+
+# Ajout de la table SQL dans notre DB zabbix_proxy
+
+
+mysql -uroot -p'$ROOT_DB_PASS' -D zabbix_proxy -e "set global innodb_strict_mode='OFF';"
+
+zcat /usr/share/doc/zabbix-proxy-mysql*/schema.sql.gz |  mysql -u zabbix --password=$ZABBIX_DB_PASS zabbix_proxy
+
+mysql -uroot -p'$ROOT_DB_PASS' -D zabbix_proxy -e "set global innodb_strict_mode='ON';"
+
+
 
 echo "Zabbix actif"
 
