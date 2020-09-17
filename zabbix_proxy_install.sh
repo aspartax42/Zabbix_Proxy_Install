@@ -16,6 +16,8 @@ tput setaf 2; echo ""
 # Récupération du paquet Zabbix 4.4
 #	rm zabbix-release_4.4-1+buster_all.*
 
+cd /tmp
+
 wget https://repo.zabbix.com/zabbix/4.4/debian/pool/main/z/zabbix-release/zabbix-release_4.4-1%2Bbuster_all.deb
 
 # Ajout de la variable PATH qui peux poser problème
@@ -55,6 +57,15 @@ mysql -uroot -p'$ROOT_DB_PASS' -e "create database zabbix_proxy character set ut
 
 mysql -uroot -p'$ROOT_DB_PASS' -e "grant all on zabbix_proxy.* to 'zabbix'@'%' identified by '"$ZABBIX_DB_PASS"' with grant option;"
 
+
+# Ajout de la table SQL dans notre DB zabbix_proxy
+
+
+mysql -uroot -p'$ROOT_DB_PASS' -D zabbix_proxy -e "set global innodb_strict_mode='OFF';"
+
+zcat /usr/share/doc/zabbix-proxy-mysql*/schema.sql.gz |  mysql -u zabbix --password=$ZABBIX_DB_PASS zabbix_proxy
+
+mysql -uroot -p'$ROOT_DB_PASS' -D zabbix_proxy -e "set global innodb_strict_mode='ON';"
 
 # Execution du script de modification du fichier /etc/zabbix/zabbix_proxy.conf
 echo "Server=monitoring.stodeo.com" > /etc/zabbix/zabbix_proxy.conf
@@ -133,17 +144,6 @@ systemctl restart zabbix-proxy
 echo "PSK OK"
 
 
-# Ajout de la table SQL dans notre DB zabbix_proxy
-
-
-mysql -uroot -p'$ROOT_DB_PASS' -D zabbix_proxy -e "set global innodb_strict_mode='OFF';"
-
-zcat /usr/share/doc/zabbix-proxy-mysql*/schema.sql.gz |  mysql -u zabbix --password=$ZABBIX_DB_PASS zabbix_proxy
-
-mysql -uroot -p'$ROOT_DB_PASS' -D zabbix_proxy -e "set global innodb_strict_mode='ON';"
-
-
-
 echo "Zabbix actif"
 
 clear
@@ -159,4 +159,3 @@ cat /etc/zabbix/zabbix_proxy.psk
 echo ""
 echo ""
 echo "       By Lilian COLLARD       "
-echo "       Prorexem SAS       "
