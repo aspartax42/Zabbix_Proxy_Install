@@ -47,7 +47,7 @@ EOF
 # Configuration de la base de données
 mysql -uroot -p'$ROOT_DB_PASS' -e "drop database if exists zabbix_proxy;"
 
-mysql -uroot -p'$ROOT_DB_PASS' -e "drop user if exists zabbix1@localhost;"
+mysql -uroot -p'$ROOT_DB_PASS' -e "drop user if exists zabbix@localhost;"
 
 mysql -uroot -p'$ROOT_DB_PASS' -e "create database zabbix_proxy character set utf8 collate utf8_bin;"
 
@@ -142,6 +142,7 @@ echo ""
 echo "Voici le nom du proxy: "$ZABBIX_PROXY_HOSTNAME""
 echo ""
 echo "Voici la clé PSK généré automatiquement: "
+echo ""
 cat /etc/zabbix/zabbix_proxy.psk
 
 echo ""
