@@ -128,6 +128,8 @@ tput setaf 7; echo "Nom du proxy: "$ZABBIX_PROXY_HOSTNAME""
 tput setaf 7; echo ""
 tput setaf 7; echo "Nom du serveur principal Zabbix: "$ZABBIX_SERVER""
 tput setaf 7; echo ""
+tput setaf 7; echo "Nom de l'indentité PSK: "$PSK_ID""
+tput setaf 7; echo ""
 tput setaf 7; echo "Voici la clé PSK généré automatiquement: "
 tput setaf 7; cat /etc/zabbix/zabbix_proxy.psk
 
