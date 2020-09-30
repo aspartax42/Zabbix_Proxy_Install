@@ -10,7 +10,8 @@ Plusieurs informations sont alors demandées:
 L'identité PSK servant à chiffrer la connexion entre le proxy et le serveur principal.
 
 Pour récupérer le script, il suffit de faire les commandes suivantes:
- - git clone https://github.com/aspartax42/Zabbix_Proxy_Install.git
+ - ```bash
+git clone https://github.com/aspartax42/Zabbix_Proxy_Install.git```
  - cd Zabbix_Proxy_Install
  - chmod +x zabbix_proxy_install.sh
  - ./zabbix_proxy_install.sh
