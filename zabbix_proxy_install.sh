@@ -8,7 +8,7 @@ fi
 # Principaux paramètres
 tput setaf 7; read -p "Entrer le mot de passe root de la base de données: " ROOT_DB_PASS
 tput setaf 7; read -p "Entrer le mot de passe zabbix de la base de données: " ZABBIX_DB_PASS
-tput setaf 7; read -p "Entre le nom du serveur principal Zabbix: " ZABBIX_SERVER
+tput setaf 7; read -p "Entrer le nom du serveur principal Zabbix: " ZABBIX_SERVER
 tput setaf 7; read -p "Entrer le nom du proxy: " ZABBIX_PROXY_HOSTNAME
 tput setaf 7; read -p "Entrer le nom de l'indentité PSK: " PSK_ID
 
